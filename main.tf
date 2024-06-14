@@ -132,9 +132,10 @@ resource "aws_lb_target_group" "default" {
   dynamic "stickiness" {
     for_each = var.stickiness == null ? [] : [var.stickiness]
     content {
-      type            = "lb_cookie"
+      type            = stickiness.value.type
       cookie_duration = stickiness.value.cookie_duration
       enabled         = var.target_group_protocol == "TCP" ? false : stickiness.value.enabled
+      cookie_name     = stickiness.value.type == "app_cookie" ? stickiness.value.cookie_name : null
     }
   }
 
