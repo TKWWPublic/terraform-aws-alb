@@ -66,9 +66,6 @@ variable "context" {
     label_key_case      = null
     label_value_case    = null
     descriptor_formats  = {}
-    zone                = null
-    application         = null
-    team                = null
     # Note: we have to use [] instead of null for unset lists due to
     # https://github.com/hashicorp/terraform/issues/28137
     # which was not fixed until Terraform 1.0.0,
