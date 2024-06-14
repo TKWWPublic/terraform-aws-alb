@@ -1,3 +1,13 @@
+variable "application" {
+  default     = ""
+  description = "Application name"
+  type        = string
+}
+variable "role" {
+  default     = null
+  description = "Role of the instances in the Auto Scaling Group."
+  type        = string
+}
 variable "vpc_id" {
   type        = string
   description = "VPC ID to associate with ALB"
@@ -361,4 +371,13 @@ variable "xff_header_processing_mode" {
   type        = string
   default     = "append"
   description = "Determines how the load balancer modifies the X-Forwarded-For header in the HTTP request before sending the request to the target. The possible values are append, preserve, and remove. Only valid for Load Balancers of type application. The default is append"
+}
+variable "team" {
+  description = "The team name associated with this Auto Scaling Group."
+  type        = string
+}
+
+variable "zone" {
+  description = "The zone that this repository is connected with."
+  type        = string
 }
