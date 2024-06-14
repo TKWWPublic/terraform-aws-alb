@@ -306,11 +306,7 @@ variable "stickiness" {
     type            = string
   })
   description = "Target group sticky configuration"
-  default = {
-    cookie_duration = 60
-    enabled         = false
-    type            = "lb_cookie"
-  }
+  default = null
 }
 
 variable "additional_certs" {
