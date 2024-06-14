@@ -391,3 +391,24 @@ variable "add_https_fixed_response_extra_rule" {
   description = "A boolean to add or nor a fixed-response extra rule un the https listener"
   type        = bool
 }
+
+variable "application" {
+  default     = ""
+  description = "Application name"
+  type        = string
+}
+variable "team" {
+  description = "The team name associated with this Auto Scaling Group."
+  type        = string
+}
+
+variable "zone" {
+  description = "The zone that this repository is connected with."
+  type        = string
+}
+
+variable "role" {
+  default     = null
+  description = "Role of the instances in the Auto Scaling Group."
+  type        = string
+}
