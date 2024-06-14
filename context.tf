@@ -41,6 +41,9 @@ module "this" {
   label_value_case    = var.label_value_case
   descriptor_formats  = var.descriptor_formats
   labels_as_tags      = var.labels_as_tags
+  zone                = var.zone
+  team                = var.team
+  application         = var.application
 
   context = var.context
 }
@@ -275,5 +278,24 @@ variable "descriptor_formats" {
     Default is `{}` (`descriptors` output will be empty).
     EOT
 }
+variable "application" {
+  default     = ""
+  description = "Application name"
+  type        = string
+}
+variable "team" {
+  description = "The team name associated with this Auto Scaling Group."
+  type        = string
+}
 
+variable "zone" {
+  description = "The zone that this repository is connected with."
+  type        = string
+}
+
+variable "role" {
+  default     = null
+  description = "Role of the instances in the Auto Scaling Group."
+  type        = string
+}
 #### End of copy of cloudposse/terraform-null-label/variables.tf
