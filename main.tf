@@ -223,24 +223,3 @@ resource "aws_lb_listener_certificate" "https_sni" {
   listener_arn    = one(aws_lb_listener.https[*].arn)
   certificate_arn = var.additional_certs[count.index]
 }
-
-resource "aws_lb_listener_rule" "Fixed_response" {
-  count = var.add_https_fixed_response_extra_rule ? 1 : 0
-
-  listener_arn = module.ag_alb.https_listener_arn
-  action {
-    type = "fixed-response"
-
-    fixed_response {
-      content_type = var.fixed_response_content_type
-      message_body = var.fixed_response_message_body
-      status_code  = var.fixed_response_status_code
-    }
-  }
-
-  condition {
-    path_pattern {
-      values = var.fixed_response_path_pattern
-    }
-  }
-}
