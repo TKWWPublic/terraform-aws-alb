@@ -302,21 +302,11 @@ variable "stickiness" {
   type = object({
     cookie_duration = number
     enabled         = bool
+    cookie_name     = string
+    type            = string
   })
   description = "Target group sticky configuration"
   default     = null
-}
-
-variable "stickiness_type" {
-  type        = string
-  default     = ""
-  description = "Stickiness type: lb_cookie or app_cookie"
-}
-
-variable "cookie_name" {
-  type        = string
-  default     = ""
-  description = "cookie name when stickiness_type is set to app_cookie for ALBs, source_ip for NLBs, and source_ip_dest_ip, source_ip_dest_ip_proto for GWLBs "
 }
 
 variable "additional_certs" {
