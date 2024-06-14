@@ -368,7 +368,7 @@ variable "fixed_response_content_type" {
   type        = string
 }
 
-variable "fixed_response_message_body" {s
+variable "fixed_response_message_body" {
   default     = ""
   description = "message body for extra fixed-response listener rule"
   type        = string
