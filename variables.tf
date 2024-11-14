@@ -332,6 +332,7 @@ variable "listener_rules" {
     host_header_values = optional(list(string))
     path_pattern_values = optional(list(string))
   }))
+  default = null
 }
 
 variable "lifecycle_configuration_rules" {
