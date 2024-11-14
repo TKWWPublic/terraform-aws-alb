@@ -255,3 +255,31 @@ resource "aws_lb_listener_certificate" "https_sni" {
   listener_arn    = one(aws_lb_listener.https[*].arn)
   certificate_arn = each.value
 }
+
+resource "aws_lb_listener_rule" "listener_rule" {
+  for_each = { for idx, rule in var.listener_rules : idx => rule }
+  listener_arn = aws_lb_listener.https.arn
+  priority     = each.value.priority
+
+  action {
+    type = "forward"
+    target_group_arn = each.value.target_group_arn
+  }
+
+  dynamic "condition" {
+    for_each = length(each.value.host_header_values) > 0 ? [1] : []
+    content {
+      host_header {
+        values = each.value.host_header_values
+      }
+    }
+  }
+  dynamic "condition" {
+    for_each = length(each.value.path_pattern_values) > 0 ? [1] : []
+    content {
+      path_pattern {
+        values = each.value.path_pattern_values
+      }
+    }
+  }
+}
