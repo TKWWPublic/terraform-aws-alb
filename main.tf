@@ -1,8 +1,8 @@
 resource "aws_security_group" "default" {
   count       = module.this.enabled && var.security_group_enabled ? 1 : 0
-  description = "Controls access to the ALB (HTTP/HTTPS)"
+  description = var.security_group_description == "" ? "Controls access to the ALB (HTTP/HTTPS)" : var.security_group_description
   vpc_id      = var.vpc_id
-  name        = module.this.id
+  name        = var.security_group_name == "" ? module.this.id : var.security_group_name
   tags        = module.this.tags
 }
 
