@@ -264,31 +264,6 @@ variable "listener_http_fixed_response" {
   default = null
 }
 
-variable "listener_http_forward" {
-  default = false
-  description = "Have the HTTP listener return a fixed response for the default action."
-  type = bool 
-}
-
-variable "listener_http_forward_stickiness_duration" {
-  default = 1
-  description = "The duration of the stickiness for the default action."
-  type = number
-  
-}
-
-variable "listener_http_forward_stickiness_enabled" {
-  default = false
-  description = "The duration of the stickiness for the default action."
-  type = bool
-}
-
-variable "listener_http_forward_weight" {
-  default = 1
-  description = "The weight of the target group for the default action."
-  type = number
-}
-
 variable "listener_https_fixed_response" {
   description = "Have the HTTPS listener return a fixed response for the default action."
   type = object({
@@ -297,31 +272,6 @@ variable "listener_https_fixed_response" {
     status_code  = string
   })
   default = null
-}
-
-variable "listener_https_forward" {
-  default = false
-  description = "Have the HTTPS listener return a fixed response for the default action."
-  type = bool 
-}
-
-variable "listener_https_forward_stickiness_duration" {
-  default = 1
-  description = "The duration of the stickiness for the default action."
-  type = number
-  
-}
-
-variable "listener_https_forward_stickiness_enabled" {
-  default = false
-  description = "The duration of the stickiness for the default action."
-  type = bool
-}
-
-variable "listener_https_forward_weight" {
-  default = 1
-  description = "The weight of the target group for the default action."
-  type = number
 }
 
 variable "lifecycle_configuration_rules" {

@@ -170,19 +170,6 @@ resource "aws_lb_listener" "http_forward" {
         status_code  = fixed_response.value["status_code"]
       }
     }
-    dynamic "forward" {
-      for_each = var.listener_http_forward ? [1] : []
-      content {
-        target_group {
-          arn    = one(aws_lb_target_group.default[*].arn)
-          weight = var.listener_http_forward_weight
-        }
-        stickiness {
-          duration = var.listener_http_forward_stickiness_duration
-          enabled  = var.listener_http_forward_stickiness_enabled
-        }
-      }
-    }
   }
 }
 
@@ -226,19 +213,6 @@ resource "aws_lb_listener" "https" {
         content_type = fixed_response.value["content_type"]
         message_body = fixed_response.value["message_body"]
         status_code  = fixed_response.value["status_code"]
-      }
-    }
-    dynamic "forward" {
-      for_each = var.listener_https_forward ? [1] : []
-      content {
-        target_group {
-          arn    = one(aws_lb_target_group.default[*].arn)
-          weight = var.listener_https_forward_weight
-        }
-        stickiness {
-          duration = var.listener_https_forward_stickiness_duration
-          enabled  = var.listener_https_forward_stickiness_enabled
-        }
       }
     }
   }
