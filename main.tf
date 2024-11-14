@@ -218,8 +218,14 @@ resource "aws_lb_listener" "https" {
   }
 }
 
+locals {
+  create_listener_certificates = module.this.enabled && var.https_enabled
+  additional_certs_map = { for cert in var.additional_certs : cert => cert }
+}
+
 resource "aws_lb_listener_certificate" "https_sni" {
-  count           = module.this.enabled && var.https_enabled && length(var.additional_certs) > 0 ? length(var.additional_certs) : 0
+  for_each = local.create_listener_certificates ? local.additional_certs_map : {}
+
   listener_arn    = one(aws_lb_listener.https[*].arn)
-  certificate_arn = var.additional_certs[count.index]
+  certificate_arn = each.value
 }
