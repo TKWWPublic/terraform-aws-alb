@@ -215,6 +215,19 @@ resource "aws_lb_listener" "https" {
         status_code  = fixed_response.value["status_code"]
       }
     }
+    dynamic "forward" {
+      for_each = var.listener_https_forward ? [1] : []
+      content {
+        target_group {
+          arn    = one(aws_lb_target_group.default[*].arn)
+          weight = var.listener_https_forward_weight
+        }
+        stickiness {
+          duration = var.listener_https_forward_stickiness_duration
+          enabled  = var.listener_https_forward_stickiness_enabled
+        }
+      }
+    }
   }
 }
 
