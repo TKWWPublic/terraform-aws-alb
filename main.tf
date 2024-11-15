@@ -177,10 +177,6 @@ resource "aws_lb_listener" "http_forward" {
           arn    = one(aws_lb_target_group.default[*].arn)
           weight = var.listener_http_forward_weight
         }
-        stickiness {
-          duration = var.listener_http_forward_stickiness_duration
-          enabled  = var.listener_http_forward_stickiness_enabled
-        }
       }
     }
   }
@@ -235,10 +231,6 @@ resource "aws_lb_listener" "https" {
           arn    = one(aws_lb_target_group.default[*].arn)
           weight = var.listener_https_forward_weight
         }
-        stickiness {
-          duration = var.listener_https_forward_stickiness_duration
-          enabled  = var.listener_https_forward_stickiness_enabled
-        }
       }
     }
   }
@@ -261,17 +253,26 @@ resource "aws_lb_listener_rule" "listener_rule" {
   listener_arn = aws_lb_listener.https[0].arn
   priority     = each.value.priority
 
-  action {
-    type = "forward"
-    forward {
-      stickiness {
-        duration = 1
-        enabled  = false
+  dynamic "action" {
+    for_each = each.value.action == "fixed-response" ? [1] : []
+    content {
+      type = "fixed-response"
+      fixed_response {
+        content_type = each.value.fixed_response.content_type
+        message_body = each.value.fixed_response.message_body
+        status_code  = each.value.fixed_response.status_code
       }
-
-      target_group {
-        arn    = each.value.target_group_arn
-        weight = 1
+    }
+  }
+  dynamic "action" {
+    for_each = each.value.action == "forward" ? [1] : []
+    content {
+      type = "forward"
+      forward {
+        target_group {
+          arn    = each.value.target_group_arn
+          weight = 1
+        }
       }
     }
   }
