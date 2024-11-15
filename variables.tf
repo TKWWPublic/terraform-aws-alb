@@ -270,19 +270,6 @@ variable "listener_http_forward" {
   type = bool 
 }
 
-variable "listener_http_forward_stickiness_duration" {
-  default = 1
-  description = "The duration of the stickiness for the default action."
-  type = number
-  
-}
-
-variable "listener_http_forward_stickiness_enabled" {
-  default = false
-  description = "The duration of the stickiness for the default action."
-  type = bool
-}
-
 variable "listener_http_forward_weight" {
   default = 1
   description = "The weight of the target group for the default action."
@@ -303,19 +290,6 @@ variable "listener_https_forward" {
   default = false
   description = "Have the HTTPS listener return a fixed response for the default action."
   type = bool 
-}
-
-variable "listener_https_forward_stickiness_duration" {
-  default = 1
-  description = "The duration of the stickiness for the default action."
-  type = number
-  
-}
-
-variable "listener_https_forward_stickiness_enabled" {
-  default = false
-  description = "The duration of the stickiness for the default action."
-  type = bool
 }
 
 variable "listener_https_forward_weight" {
