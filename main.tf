@@ -278,7 +278,7 @@ resource "aws_lb_listener_rule" "listener_rule" {
   }
 
   dynamic "condition" {
-    for_each = each.value.host_header_values != null && length(each.value.host_header_values) > 0 ? [1] : []
+    for_each = coalesce(each.value.host_header_values, []) != [] && length(coalesce(each.value.host_header_values, [])) > 0 ? [1] : []
     content {
       host_header {
         values = each.value.host_header_values
