@@ -298,27 +298,6 @@ variable "listener_https_forward_weight" {
   type = number
 }
 
-variable "listener_rules" {
-  default = {}
-  description = "List of listener rules"
-  type = map(object({
-    action            = optional(string)
-    fixed_response    = optional(object({
-      content_type = string
-      message_body = string
-      status_code  = string
-    }))
-    host_header_values = optional(list(string))
-    http_header_values = optional(list(object({
-      name   = string
-      values = list(string)
-    })))
-    path_pattern_values = optional(list(string))
-    priority          = optional(number)
-    target_group_arn  = optional(string)
-  }))
-}
-
 variable "lifecycle_configuration_rules" {
   type = list(object({
     enabled = bool
