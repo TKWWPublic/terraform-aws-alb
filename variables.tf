@@ -307,6 +307,10 @@ variable "listener_rules" {
     target_group_arn  = optional(string)
     host_header_values = optional(list(string))
     path_pattern_values = optional(list(string))
+    http_header_values = optional(list(object({
+      name   = string
+      values = list(string)
+    })))
     fixed_response    = optional(object({
       content_type = string
       message_body = string
