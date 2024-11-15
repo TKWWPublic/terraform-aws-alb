@@ -258,7 +258,7 @@ resource "aws_lb_listener_certificate" "https_sni" {
 
 resource "aws_lb_listener_rule" "listener_rule" {
   for_each = { for idx, rule in var.listener_rules : idx => rule }
-  listener_arn = aws_lb_listener.https.arn
+  listener_arn = aws_lb_listener.https[each.key].arn
   priority     = each.value.priority
 
   action {
