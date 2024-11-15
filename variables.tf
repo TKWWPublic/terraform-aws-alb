@@ -325,9 +325,9 @@ variable "listener_https_forward_weight" {
 }
 
 variable "listener_rules" {
-  default = []
+  default = {}
   description = "List of listener rules"
-  type = list(object({
+  type = map(object({
     priority          = optional(number)
     target_group_arn  = optional(string)
     host_header_values = optional(list(string))

@@ -257,17 +257,27 @@ resource "aws_lb_listener_certificate" "https_sni" {
 }
 
 resource "aws_lb_listener_rule" "listener_rule" {
-  for_each = { for idx, rule in var.listener_rules : idx => rule }
-  listener_arn = aws_lb_listener.https[each.key].arn
+  for_each = var.listener_rules
+  listener_arn = aws_lb_listener.https[0].arn
   priority     = each.value.priority
 
   action {
     type = "forward"
-    target_group_arn = each.value.target_group_arn
+    forward {
+      stickiness {
+        duration = 1
+        enabled  = false
+      }
+
+      target_group {
+        arn    = each.value.target_group_arn
+        weight = 1
+      }
+    }
   }
 
   dynamic "condition" {
-    for_each = length(each.value.host_header_values) > 0 ? [1] : []
+    for_each = each.value.host_header_values != null && length(each.value.host_header_values) > 0 ? [1] : []
     content {
       host_header {
         values = each.value.host_header_values
@@ -275,7 +285,7 @@ resource "aws_lb_listener_rule" "listener_rule" {
     }
   }
   dynamic "condition" {
-    for_each = length(each.value.path_pattern_values) > 0 ? [1] : []
+    for_each = coalesce(each.value.path_pattern_values, []) != [] && length(coalesce(each.value.path_pattern_values, [])) > 0 ? [1] : []
     content {
       path_pattern {
         values = each.value.path_pattern_values
