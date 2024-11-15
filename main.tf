@@ -293,4 +293,14 @@ resource "aws_lb_listener_rule" "listener_rule" {
       }
     }
   }
+  dynamic "condition" {
+    for_each = coalesce(each.value.http_header_values, []) != [] && length(coalesce(each.value.http_header_values, [])) > 0 ? each.value.http_header_values : []
+
+    content {
+      http_header {
+        http_header_name = condition.value.name
+        values = condition.value.values
+      }
+    }
+  }
 }
