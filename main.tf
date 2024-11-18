@@ -170,6 +170,15 @@ resource "aws_lb_listener" "http_forward" {
         status_code  = fixed_response.value["status_code"]
       }
     }
+    dynamic "forward" {
+      for_each = var.listener_http_forward ? [1] : []
+      content {
+        target_group {
+          arn    = one(aws_lb_target_group.default[*].arn)
+          weight = var.listener_http_forward_weight
+        }
+      }
+    }
   }
 }
 
@@ -215,11 +224,26 @@ resource "aws_lb_listener" "https" {
         status_code  = fixed_response.value["status_code"]
       }
     }
+    dynamic "forward" {
+      for_each = var.listener_https_forward ? [1] : []
+      content {
+        target_group {
+          arn    = one(aws_lb_target_group.default[*].arn)
+          weight = var.listener_https_forward_weight
+        }
+      }
+    }
   }
 }
 
+locals {
+  create_listener_certificates = module.this.enabled && var.https_enabled
+  additional_certs_map = { for cert in var.additional_certs : cert => cert }
+}
+
 resource "aws_lb_listener_certificate" "https_sni" {
-  count           = module.this.enabled && var.https_enabled && length(var.additional_certs) > 0 ? length(var.additional_certs) : 0
+  for_each = local.create_listener_certificates ? local.additional_certs_map : {}
+
   listener_arn    = one(aws_lb_listener.https[*].arn)
-  certificate_arn = var.additional_certs[count.index]
+  certificate_arn = each.value
 }
