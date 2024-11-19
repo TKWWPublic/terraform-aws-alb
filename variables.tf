@@ -39,7 +39,7 @@ variable "http_redirect" {
 }
 
 variable "http_redirect_status_code" {
-  type = bool
+  type = string
   default = "HTTP_301"
   description = "value of the status code to use when redirecting HTTP"
 
