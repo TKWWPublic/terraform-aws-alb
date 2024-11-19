@@ -38,6 +38,13 @@ variable "http_redirect" {
   description = "A boolean flag to enable/disable HTTP redirect to HTTPS"
 }
 
+variable "http_redirect_status_code" {
+  type = bool
+  default = "HTTP_301"
+  description = "value of the status code to use when redirecting HTTP"
+
+}
+
 variable "http_ingress_cidr_blocks" {
   type        = list(string)
   default     = ["0.0.0.0/0"]
