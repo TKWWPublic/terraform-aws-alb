@@ -207,7 +207,7 @@ resource "aws_lb_listener" "https" {
   load_balancer_arn = one(aws_lb.default[*].arn)
 
   port            = var.https_port
-  protocol        = "HTTPS"
+  protocol        = var.https_protocol
   ssl_policy      = var.https_ssl_policy
   certificate_arn = var.certificate_arn
   tags            = merge(module.this.tags, var.listener_additional_tags)

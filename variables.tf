@@ -69,6 +69,12 @@ variable "https_port" {
   description = "The port for the HTTPS listener"
 }
 
+variable "https_protocol" {
+  type = string
+  default = "HTTPS"
+  description = "value of the protocol to use for the HTTPS listener"
+}
+
 variable "https_enabled" {
   type        = bool
   default     = false
