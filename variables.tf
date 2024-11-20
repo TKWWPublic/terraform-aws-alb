@@ -370,6 +370,13 @@ variable "load_balancing_algorithm_type" {
   description = "Determines how the load balancer selects targets when routing requests. Only applicable for Application Load Balancer Target Groups"
 }
 
+variable "load_balancer_type" {
+  type = string
+  default = "application"
+  description = "T Type of load balancer to create. Possible values are application, gateway, or network."
+}
+
+
 variable "default_target_group_enabled" {
   type        = bool
   description = "Whether the default target group should be created or not."

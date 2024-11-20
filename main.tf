@@ -75,7 +75,7 @@ resource "aws_lb" "default" {
   name               = var.load_balancer_name == "" ? module.default_load_balancer_label.id : substr(var.load_balancer_name, 0, var.load_balancer_name_max_length)
   tags               = module.this.tags
   internal           = var.internal
-  load_balancer_type = "application"
+  load_balancer_type = var.load_balancer_type
 
   security_groups = compact(
     concat(var.security_group_ids, [one(aws_security_group.default[*].id)]),
