@@ -75,7 +75,7 @@ resource "aws_lb" "default" {
   name               = var.load_balancer_name == "" ? module.default_load_balancer_label.id : substr(var.load_balancer_name, 0, var.load_balancer_name_max_length)
   tags               = module.this.tags
   internal           = var.internal
-  load_balancer_type = "application"
+  load_balancer_type = var.load_balancer_type
 
   security_groups = compact(
     concat(var.security_group_ids, [one(aws_security_group.default[*].id)]),
@@ -170,6 +170,15 @@ resource "aws_lb_listener" "http_forward" {
         status_code  = fixed_response.value["status_code"]
       }
     }
+    dynamic "forward" {
+      for_each = var.listener_http_forward ? [1] : []
+      content {
+        target_group {
+          arn    = one(aws_lb_target_group.default[*].arn)
+          weight = var.listener_http_forward_weight
+        }
+      }
+    }
   }
 }
 
@@ -187,7 +196,7 @@ resource "aws_lb_listener" "http_redirect" {
     redirect {
       port        = "443"
       protocol    = "HTTPS"
-      status_code = "HTTP_301"
+      status_code = var.http_redirect_status_code
     }
   }
 }
@@ -215,11 +224,26 @@ resource "aws_lb_listener" "https" {
         status_code  = fixed_response.value["status_code"]
       }
     }
+    dynamic "forward" {
+      for_each = var.listener_https_forward ? [1] : []
+      content {
+        target_group {
+          arn    = one(aws_lb_target_group.default[*].arn)
+          weight = var.listener_https_forward_weight
+        }
+      }
+    }
   }
 }
 
+locals {
+  create_listener_certificates = module.this.enabled && var.https_enabled
+  additional_certs_map = { for cert in var.additional_certs : cert => cert }
+}
+
 resource "aws_lb_listener_certificate" "https_sni" {
-  count           = module.this.enabled && var.https_enabled && length(var.additional_certs) > 0 ? length(var.additional_certs) : 0
+  for_each = local.create_listener_certificates ? local.additional_certs_map : {}
+
   listener_arn    = one(aws_lb_listener.https[*].arn)
-  certificate_arn = var.additional_certs[count.index]
+  certificate_arn = each.value
 }

@@ -38,6 +38,13 @@ variable "http_redirect" {
   description = "A boolean flag to enable/disable HTTP redirect to HTTPS"
 }
 
+variable "http_redirect_status_code" {
+  type = string
+  default = "HTTP_301"
+  description = "value of the status code to use when redirecting HTTP"
+
+}
+
 variable "http_ingress_cidr_blocks" {
   type        = list(string)
   default     = ["0.0.0.0/0"]
@@ -264,6 +271,18 @@ variable "listener_http_fixed_response" {
   default = null
 }
 
+variable "listener_http_forward" {
+  default = false
+  description = "Have the HTTP listener return a fixed response for the default action."
+  type = bool 
+}
+
+variable "listener_http_forward_weight" {
+  default = 1
+  description = "The weight of the target group for the default action."
+  type = number
+}
+
 variable "listener_https_fixed_response" {
   description = "Have the HTTPS listener return a fixed response for the default action."
   type = object({
@@ -272,6 +291,18 @@ variable "listener_https_fixed_response" {
     status_code  = string
   })
   default = null
+}
+
+variable "listener_https_forward" {
+  default = false
+  description = "Have the HTTPS listener return a fixed response for the default action."
+  type = bool 
+}
+
+variable "listener_https_forward_weight" {
+  default = 1
+  description = "The weight of the target group for the default action."
+  type = number
 }
 
 variable "lifecycle_configuration_rules" {
@@ -337,6 +368,12 @@ variable "load_balancing_algorithm_type" {
   type        = string
   default     = "round_robin"
   description = "Determines how the load balancer selects targets when routing requests. Only applicable for Application Load Balancer Target Groups"
+}
+
+variable "load_balancer_type" {
+  type = string
+  default = "application"
+  description = "T Type of load balancer to create. Possible values are application, gateway, or network."
 }
 
 variable "default_target_group_enabled" {
