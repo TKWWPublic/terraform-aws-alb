@@ -376,7 +376,6 @@ variable "load_balancer_type" {
   description = "T Type of load balancer to create. Possible values are application, gateway, or network."
 }
 
-
 variable "default_target_group_enabled" {
   type        = bool
   description = "Whether the default target group should be created or not."
