@@ -32,6 +32,12 @@ variable "http_enabled" {
   description = "A boolean flag to enable/disable HTTP listener"
 }
 
+variable "http_protocol" {
+  type = string
+  default = "HTTP"
+  description = "value of the protocol to use for the HTTP listener"
+}
+
 variable "http_redirect" {
   type        = bool
   default     = false
@@ -398,6 +404,15 @@ variable "preserve_host_header" {
   type        = bool
   default     = false
   description = "Indicates whether the Application Load Balancer should preserve the Host header in the HTTP request and send it to the target without any change."
+}
+
+variable "subnet_mapping" {
+  default = []
+  description = "List of maps with subnet_id and allocation_id, can only be used when the variable subnet_ids is not used"
+  type        = list(object({
+    subnet_id     = string
+    allocation_id = string
+  }))
 }
 
 variable "xff_header_processing_mode" {

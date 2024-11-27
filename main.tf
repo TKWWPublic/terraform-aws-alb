@@ -91,6 +91,14 @@ resource "aws_lb" "default" {
   preserve_host_header             = var.preserve_host_header
   xff_header_processing_mode       = var.xff_header_processing_mode
 
+dynamic "subnet_mapping" {
+    for_each = var.subnet_mapping
+    content {
+      subnet_id     = subnet_mapping.value.subnet_id
+      allocation_id = subnet_mapping.value.allocation_id
+    }
+  }
+
   access_logs {
     bucket  = try(element(compact([var.access_logs_s3_bucket_id, module.access_logs.bucket_id]), 0), "")
     prefix  = var.access_logs_prefix
@@ -155,7 +163,7 @@ resource "aws_lb_listener" "http_forward" {
   count             = module.this.enabled && var.http_enabled && var.http_redirect != true ? 1 : 0
   load_balancer_arn = one(aws_lb.default[*].arn)
   port              = var.http_port
-  protocol          = "HTTP"
+  protocol          = var.http_protocol
   tags              = merge(module.this.tags, var.listener_additional_tags)
 
   default_action {
